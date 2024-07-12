@@ -1,24 +1,61 @@
-import LoadMoreBtn from '../LoadMoreButton/LoadMoreButton';
+import { useEffect, useState } from 'react';
+import { fetchGallery } from '../../unsplash-api';
 import SearchBar from '../SearchBar/SearchBar';
 import ImageGallery from '../ImageGallery/ImageGallery';
-// import ImageCard from '../ImageCard/ImageCard';
 import Loader from '../Loader/Loader';
-import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import LoadMoreBtn from '../LoadMoreButton/LoadMoreButton';
 import ImageModal from '../ImageModal/ImageModal';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 function App() {
-  const handleSubmit = value => {
-    console.log(value);
+  const [topic, setTopic] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [gallery, setGallery] = useState([]);
+  const [loader, setLoader] = useState(false);
+  const [error, setError] = useState(false);
+  const [totalPages, setTotalPages] = useState(999);
+
+  const handleSearch = async newTopic => {
+    setGallery([]);
+    setCurrentPage(1);
+    setTopic(newTopic);
   };
+
+  const handleLoadMore = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  useEffect(() => {
+    if (topic === '') return;
+
+    const getGallery = async () => {
+      try {
+        setLoader(true);
+        setError(false);
+        const data = await fetchGallery(topic, currentPage);
+        setTotalPages(data.total_pages);
+        setGallery(prevGallery => [...prevGallery, ...data.results]);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoader(false);
+      }
+    };
+    getGallery();
+  }, [topic, currentPage]);
 
   return (
     <div>
-      <SearchBar onSubmit={handleSubmit} />
-      <ImageGallery />
-      <Loader />
-      <LoadMoreBtn />
-      <ImageModal />
-      <ErrorMessage />
+      <SearchBar onSearch={handleSearch} />
+      {gallery.length > 0 && <ImageGallery items={gallery} />}
+      {gallery.length > 0 && <ImageModal />}
+      {error && <ErrorMessage />}
+      {loader && <Loader />}
+      {gallery.length > 0 && !loader && currentPage < totalPages && (
+        <LoadMoreBtn onPage={handleLoadMore} />
+      )}
+      {currentPage >= totalPages && <p>This is the end of gallery</p>}
+      {totalPages === 0 && <p>No one image for this request</p>}
     </div>
   );
 }

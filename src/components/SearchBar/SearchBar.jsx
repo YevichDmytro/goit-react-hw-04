@@ -1,16 +1,16 @@
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
-const SearchBar = ({ onSubmit }) => {
+const SearchBar = ({ onSearch }) => {
   const handleSubmit = e => {
     e.preventDefault();
+    
     const form = e.target;
     const inputValue = form.elements.search.value.trim();
 
     if (inputValue === '') {
-      toast('Field are empty!');
-      console.log('Field are empty!');
+      toast.error('Field are empty!');
     } else {
-      onSubmit(inputValue);
+      onSearch(inputValue);
     }
 
     form.reset();
@@ -18,6 +18,7 @@ const SearchBar = ({ onSubmit }) => {
 
   return (
     <header>
+      <Toaster />
       <form onSubmit={handleSubmit}>
         <input
           type='text'
