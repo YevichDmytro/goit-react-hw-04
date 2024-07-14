@@ -1,13 +1,12 @@
 import ImageCard from '../ImageCard/ImageCard';
 
-const ImageGallery = ({ items }) => {
-
+const ImageGallery = ({ items, handleOpenModal }) => {
   return (
     <ul>
-      {items.map(item => {
+      {items.map(({ id, urls, alt_description }) => {
         return (
-          <li key={item.id}>
-            <ImageCard onLink={item.urls} onAlt={item.alt_description} />
+          <li key={id} onClick={handleOpenModal}>
+            <ImageCard onLink={urls} onAlt={alt_description} />
           </li>
         );
       })}

@@ -15,6 +15,9 @@ function App() {
   const [error, setError] = useState(false);
   const [totalPages, setTotalPages] = useState(999);
 
+  const [openModal, setOpenModal] = useState(false);
+  // const [modalImg, setModalImg] = useState({});
+
   const handleSearch = async newTopic => {
     setGallery([]);
     setCurrentPage(1);
@@ -44,11 +47,28 @@ function App() {
     getGallery();
   }, [topic, currentPage]);
 
+  // const openCloseModal = () => {
+  //   setOpenModal(!openModal);
+  //   if (openModal) document.body.style.overflow = 'auto';
+  //   else document.body.style.overflow = 'hidden';
+  // };
+
+  const handleOpenModal = id => {
+    console.log(id);
+  };
+
   return (
     <div>
       <SearchBar onSearch={handleSearch} />
       {gallery.length > 0 && <ImageGallery items={gallery} />}
-      {gallery.length > 0 && <ImageModal />}
+
+      <ImageGallery items={gallery} handleOpenModal={handleOpenModal} />
+
+      {/* 
+      {openModal && (
+        <ImageModal openCloseModal={openCloseModal} modalImg={modalImg} />
+      )} */}
+
       {error && <ErrorMessage />}
       {loader && <Loader />}
       {gallery.length > 0 && !loader && currentPage < totalPages && (
