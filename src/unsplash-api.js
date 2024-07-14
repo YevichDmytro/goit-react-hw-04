@@ -9,6 +9,7 @@ export const fetchGallery = async (query, page) => {
     client_id: accessKey,
     query: query,
     page: page,
+    per_page: 20,
   };
 
   const response = await axios.get('/search/photos', {

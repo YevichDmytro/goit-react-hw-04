@@ -6,27 +6,27 @@ import Loader from '../Loader/Loader';
 import LoadMoreBtn from '../LoadMoreButton/LoadMoreButton';
 import ImageModal from '../ImageModal/ImageModal';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import style from './App.module.css';
 
 function App() {
   const [topic, setTopic] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
   const [gallery, setGallery] = useState([]);
-  const [loader, setLoader] = useState(false);
-  const [error, setError] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(999);
 
+  const [loader, setLoader] = useState(false);
+  const [error, setError] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  // const [modalImg, setModalImg] = useState({});
+  const [modalImg, setModalImg] = useState({});
 
-  const handleSearch = async newTopic => {
-    setGallery([]);
-    setCurrentPage(1);
-    setTopic(newTopic);
-  };
+  const isVisible = gallery.length > 0;
 
-  const handleLoadMore = () => {
-    setCurrentPage(currentPage + 1);
-  };
+  useEffect(() => {
+    if (loader) {
+      document.body.style.overflow = 'hidden';
+    }
+    document.body.style.overflow = null;
+  }, [loader]);
 
   useEffect(() => {
     if (topic === '') return;
@@ -47,34 +47,45 @@ function App() {
     getGallery();
   }, [topic, currentPage]);
 
-  // const openCloseModal = () => {
-  //   setOpenModal(!openModal);
-  //   if (openModal) document.body.style.overflow = 'auto';
-  //   else document.body.style.overflow = 'hidden';
-  // };
+  const handleSearch = async newTopic => {
+    setGallery([]);
+    setCurrentPage(1);
+    setTopic(newTopic);
+  };
 
-  const handleOpenModal = id => {
-    console.log(id);
+  const handleLoadMore = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const handleOpenModal = item => {
+    setOpenModal(true);
+    setModalImg(item);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const openCloseModal = () => {
+    setOpenModal(false);
+    setModalImg(null);
+    document.body.style.overflow = null;
   };
 
   return (
-    <div>
+    <div className={style.mainBox}>
       <SearchBar onSearch={handleSearch} />
-      {gallery.length > 0 && <ImageGallery items={gallery} />}
-
-      <ImageGallery items={gallery} handleOpenModal={handleOpenModal} />
-
-      {/* 
+      {isVisible && (
+        <ImageGallery items={gallery} handleOpenModal={handleOpenModal} />
+      )}
       {openModal && (
-        <ImageModal openCloseModal={openCloseModal} modalImg={modalImg} />
-      )} */}
-
+        <ImageModal modalImg={modalImg} openCloseModal={openCloseModal} />
+      )}
       {error && <ErrorMessage />}
       {loader && <Loader />}
-      {gallery.length > 0 && !loader && currentPage < totalPages && (
+      {isVisible && !loader && currentPage < totalPages && (
         <LoadMoreBtn onPage={handleLoadMore} />
       )}
-      {currentPage >= totalPages && <p>This is the end of gallery</p>}
+      {currentPage >= totalPages && gallery.length !== 0 && (
+        <p className={style.textElem}>This is the end of gallery</p>
+      )}
       {totalPages === 0 && <p>No one image for this request</p>}
     </div>
   );

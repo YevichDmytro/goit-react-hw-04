@@ -1,9 +1,11 @@
+import { Button, TextField } from '@mui/material';
 import toast, { Toaster } from 'react-hot-toast';
+import style from './SearchBar.module.css';
 
 const SearchBar = ({ onSearch }) => {
   const handleSubmit = e => {
     e.preventDefault();
-    
+
     const form = e.target;
     const inputValue = form.elements.search.value.trim();
 
@@ -17,17 +19,20 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <header>
+    <header className={style.header}>
       <Toaster />
-      <form onSubmit={handleSubmit}>
-        <input
+      <form onSubmit={handleSubmit} className={style.form}>
+        <TextField
+          id='outlined-basic'
+          variant='outlined'
+          label='Search images and photos'
           type='text'
           name='search'
-          autoComplete='off'
-          autoFocus
-          placeholder='Search images and photos'
+          autoComplete='on'
         />
-        <button type='submit'>Search</button>
+        <Button variant='contained' type='submit'>
+          Search
+        </Button>
       </form>
     </header>
   );

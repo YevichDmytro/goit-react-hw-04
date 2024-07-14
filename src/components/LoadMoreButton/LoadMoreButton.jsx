@@ -1,10 +1,18 @@
+import { Button } from '@mui/material';
+import style from './LoadMoreButton.module.css';
+
 const LoadMoreButton = ({ onPage }) => {
   return (
-    <>
-      <button type='button' onClick={() => onPage()}>
+    <div className={style.loadMoreBtnBox}>
+      <Button
+        type='button'
+        size='large'
+        variant='contained'
+        onClick={() => onPage()}
+      >
         Load more
-      </button>
-    </>
+      </Button>
+    </div>
   );
 };
 

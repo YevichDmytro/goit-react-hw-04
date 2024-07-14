@@ -1,7 +1,10 @@
 import Modal from 'react-modal';
 // import css from './ImageModal.modal.css'
 
-const ImageModal = ({ openCloseModal, modalImg }) => {
+const ImageModal = ({
+  openCloseModal,
+  modalImg: { urls, alt_description },
+}) => {
   const customStyles = {
     content: {
       top: '50%',
@@ -24,10 +27,10 @@ const ImageModal = ({ openCloseModal, modalImg }) => {
       style={customStyles}
       onRequestClose={() => openCloseModal()}
     >
-      {/* <img src={} alt={} />
+      <img src={urls.regular} alt={alt_description} />
       <div className=''>
-        <p>text</p>
-      </div> */}
+        <p>{alt_description}</p>
+      </div>
     </Modal>
   );
 };
