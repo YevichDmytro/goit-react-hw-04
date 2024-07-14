@@ -16,5 +16,6 @@ export const fetchGallery = async (query, page) => {
     params: params,
   });
 
+  console.log(response.data);
   return response.data;
 };
