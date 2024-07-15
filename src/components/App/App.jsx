@@ -25,7 +25,7 @@ function App() {
     if (loader) {
       document.body.style.overflow = 'hidden';
     }
-    document.body.style.overflow = null;
+    document.body.style.overflow = 'auto';
   }, [loader]);
 
   useEffect(() => {
@@ -66,7 +66,7 @@ function App() {
   const openCloseModal = () => {
     setOpenModal(false);
     setModalImg(null);
-    document.body.style.overflow = null;
+    document.body.style.overflow = 'auto';
   };
 
   return (
